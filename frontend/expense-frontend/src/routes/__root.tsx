@@ -1,4 +1,9 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Link,
+  Scripts,
+  createRootRoute,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -28,6 +33,13 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
+const links = [
+  { text: 'Trading212 One Month', link: '/trading_one_month' },
+  { text: 'Trading212 multi-month', link: '/trading_multi_month' },
+  { text: 'Sparkasse One month', link: '/bank_one_month' },
+  { text: 'Sparkasse multi-month', link: '/bank_multi_month' },
+]
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -35,6 +47,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <div className="bg-pink-300 flex p-1 justify-center">
+          {links.map((link) => (
+            <div className="bg-blue-300 p-1 mx-1  rounded-md" key={link.link}>
+              <Link to={link.link}>{link.text}</Link>
+            </div>
+          ))}
+        </div>
         {children}
         <TanStackDevtools
           config={{
