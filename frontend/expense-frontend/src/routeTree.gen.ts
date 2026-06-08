@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as Trading_one_monthRouteImport } from './routes/trading_one_month'
+import { Route as Sparkasse_one_monthRouteImport } from './routes/sparkasse_one_month'
 import { Route as IndexRouteImport } from './routes/index'
 
 const Trading_one_monthRoute = Trading_one_monthRouteImport.update({
   id: '/trading_one_month',
   path: '/trading_one_month',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Sparkasse_one_monthRoute = Sparkasse_one_monthRouteImport.update({
+  id: '/sparkasse_one_month',
+  path: '/sparkasse_one_month',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/trading_one_month'
+  fullPaths: '/' | '/sparkasse_one_month' | '/trading_one_month'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/trading_one_month'
-  id: '__root__' | '/' | '/trading_one_month'
+  to: '/' | '/sparkasse_one_month' | '/trading_one_month'
+  id: '__root__' | '/' | '/sparkasse_one_month' | '/trading_one_month'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Sparkasse_one_monthRoute: typeof Sparkasse_one_monthRoute
   Trading_one_monthRoute: typeof Trading_one_monthRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/trading_one_month'
       fullPath: '/trading_one_month'
       preLoaderRoute: typeof Trading_one_monthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sparkasse_one_month': {
+      id: '/sparkasse_one_month'
+      path: '/sparkasse_one_month'
+      fullPath: '/sparkasse_one_month'
+      preLoaderRoute: typeof Sparkasse_one_monthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Sparkasse_one_monthRoute: Sparkasse_one_monthRoute,
   Trading_one_monthRoute: Trading_one_monthRoute,
 }
 export const routeTree = rootRouteImport

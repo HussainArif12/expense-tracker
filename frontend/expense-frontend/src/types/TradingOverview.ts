@@ -7,4 +7,5 @@ export interface TradingOverview {
     [stockName: string]: number // Optional: keeps it flexible for other stocks
   }
   interest_earned: number
+  cashback: number
 }

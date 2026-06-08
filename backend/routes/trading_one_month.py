@@ -2,7 +2,6 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 import pandas as pd
-import plotly.express as px
 from dependencies.open_trading_file import get_csv_file, get_df_merchant
 
 router = APIRouter(
@@ -49,12 +48,14 @@ async def get_trading_analysis(
 
     interest_earned = trading_df[trading_df["Action"] == "Interest on cash"]
     interest_earned = interest_earned["Gross Total"].sum()
-
+    cashback = trading_df[trading_df["Action"] == "Spending cashback"]
+    cashback = cashback["Gross Total"].sum()
     return {
         "total_expenses": total_expenses_grouped,
         "total_expenses_sum": total_expenses_sum,
         "stocks_only": stocks_only,
         "interest_earned": interest_earned,
+        "cashback": cashback,
     }
 
 
@@ -93,15 +94,27 @@ async def get_trading_analysis_merchant_sunburst(
         .abs()
         .reset_index()
     )
+    root = {"name": "Expenses", "children": []}
 
-    fig = px.sunburst(
-        hierarchical_data,
-        path=["Merchant category", "Merchant name"],
-        values="Gross Total",
-        title="Proportional Spending Breakdown by Category and Merchant",
-        color="Merchant category",
-        color_discrete_sequence=px.colors.qualitative.Safe,
-    )
+    # Track categories to easily attach children
+    categories_dict = {}
 
+    for _, row in hierarchical_data.iterrows():
+        cat = row["Merchant category"]
+        name = row["Merchant name"]
+        val = float(row["Gross Total"])
+
+        # If category doesn't exist in our tracker yet, initialize it
+        if cat not in categories_dict:
+            categories_dict[cat] = {"name": cat, "children": []}
+            root["children"].append(categories_dict[cat])
+
+        # Add the merchant as a leaf node (leaf nodes have 'value', not children)
+        categories_dict[cat]["children"].append(
+            {
+                "name": name,
+                "value": val,
+            }
+        )
     # Use fig.to_dict() if you plan to feed it straight into react-plotly.js!
-    return {"sunburst_chart": fig.to_dict()}
+    return {"sunburst_chart": root}
