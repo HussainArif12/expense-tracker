@@ -1,3 +1,4 @@
+import type { TradingOverview } from '#/types/TradingOverview'
 import { postFormClient } from '#/utils/post_form'
 import { ClientOnly, createFileRoute } from '@tanstack/react-router'
 import React, { useState } from 'react'
@@ -8,6 +9,7 @@ export const Route = createFileRoute('/trading_one_month')({
 
 function BackendMaker() {
   const [file, setFile] = useState<File | null>(null)
+  const [data, setData] = useState<TradingOverview | null>(null)
   const handleFileChange = (e: React.ChangeEvent<HTMLFormElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0])
@@ -23,7 +25,7 @@ function BackendMaker() {
         '/trading_month/total_expenses',
         formData,
       )
-      console.log(data)
+      setData(data)
     }
   }
   return (
@@ -39,6 +41,7 @@ function BackendMaker() {
           Submit
         </button>
       </form>
+      {data && }
     </div>
   )
 }
@@ -46,7 +49,6 @@ function BackendMaker() {
 function RouteComponent() {
   return (
     <div>
-      Hello "/trading_one_month"!
       <ClientOnly>
         <BackendMaker />
       </ClientOnly>

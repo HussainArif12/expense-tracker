@@ -25,9 +25,12 @@
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
+    "@types/plotly.js": "^3.0.10",
     "lucide-react": "^0.545.0",
+    "plotly.js": "^3.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-plotly.js": "^2.6.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
@@ -40,6 +43,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@types/react-plotly.js": "^2.6.4",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.20.0",
     "jsdom": "^28.1.0",
