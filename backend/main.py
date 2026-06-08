@@ -1,0 +1,21 @@
+from pathlib import Path
+
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
+
+from routes.trading_one_month import router as trading_one_month_router
+from routes.bank_one_month import router as bank_one_month_router
+
+BASE_DIR = Path(__file__).resolve().parent
+INDEX_FILE = BASE_DIR / "index.html"
+
+app = FastAPI()
+
+
+@app.get("/", response_class=FileResponse)
+async def root():
+    return INDEX_FILE
+
+
+app.include_router(trading_one_month_router)
+app.include_router(bank_one_month_router)

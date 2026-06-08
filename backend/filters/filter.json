@@ -1,0 +1,25 @@
+{
+    "remove_bank_rows": [
+        {
+            "column": "Beguenstigter/Zahlungspflichtiger",
+            "equals": "WOGE Saar Wohnungsgesellschaft Saarland mbH"
+        },
+        {
+            "column": "Buchungstext",
+            "equals": "GUTSCHR. UEBERWEISUNG"
+        },
+        {
+            "column": "Beguenstigter/Zahlungspflichtiger",
+            "equals": "J.P. Morgan SE"
+        },
+        {
+            "column": "Buchungstext",
+            "equals": "UEBERTRAG (GUTSCHR. UEBERW)"
+        },
+
+        {
+            "column": "Buchungstext",
+            "equals": "ECHTZEIT-GUTSCHRIFT"
+        }
+    ]
+}
