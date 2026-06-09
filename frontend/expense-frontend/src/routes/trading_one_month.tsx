@@ -1,29 +1,21 @@
+import { useFileSharing } from '#/components/FileSharingContextProvider'
 import { InfoDisplay } from '#/components/InfoDisplay'
 import { TradingOverviewOneMonthDisplay } from '#/components/TradingOverviewOneMonthDisplay'
 import type { MerchantData } from '#/types/MerchantData'
 import type { TradingOverview } from '#/types/TradingOverview'
-import { hexy } from '#/utils/generateRandomColor'
+import { mapRecordToChartData } from '#/utils/mapRecordToChartData'
 import { postFormClient } from '#/utils/post_form'
 import { ClientOnly, createFileRoute } from '@tanstack/react-router'
 import React, { useMemo, useState } from 'react'
 
 type ChartDatum = { name: string; value: number; color: string }
 
-const mapRecordToChartData = (record: Record<string, number> | undefined) =>
-  record
-    ? Object.entries(record).map(([name, value]) => ({
-        name,
-        value,
-        color: hexy(),
-      }))
-    : undefined
-
 export const Route = createFileRoute('/trading_one_month')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [file, setFile] = useState<File | null>(null)
+  const { setTradingFile, tradingFile } = useFileSharing()
   const [dataTotalExpenses, setDataTotalExpenses] =
     useState<TradingOverview | null>(null)
   const [dataMerchant, setDataMerchant] = useState<MerchantData | null>(null)
@@ -57,15 +49,15 @@ function RouteComponent() {
   )
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(event.target.files?.[0] ?? null)
+    setTradingFile(event.target.files?.[0] ?? null)
   }
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!file) return
+    if (!tradingFile) return
 
     const formData = new FormData()
-    formData.append('csvFile', file)
+    formData.append('csvFile', tradingFile)
 
     const [totalExpensesResponse, merchantResponse] = await Promise.all([
       postFormClient('/trading_month/total_expenses', formData),
@@ -75,7 +67,6 @@ function RouteComponent() {
     setDataTotalExpenses(totalExpensesResponse)
     setDataMerchant(merchantResponse)
   }
-
   return (
     <ClientOnly>
       <div className="px-10">
@@ -95,13 +86,13 @@ function RouteComponent() {
           />
           <button
             type="submit"
-            disabled={!file}
+            disabled={!tradingFile}
             className="bg-blue-300 rounded-md p-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
           >
             Submit
           </button>
         </form>
-        <div className="grid grid-cols-3 w-full gap-x-1 gap-y-1 my-4">
+        <div className="grid grid-cols-3 sm:grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
           {dataTotalExpenses && (
             <div className="w-full">
               <InfoDisplay title={'Total Spent this month (including stocks)'}>
@@ -142,25 +133,6 @@ function RouteComponent() {
           )}
         </div>
         <div className="grid grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
-          {/* {totalExpensesToRender && (
-            <PieChart data={totalExpensesToRender} title="Expenses by day" />
-          )}
-          {stocksBoughtToRender && (
-            <PieChart data={stocksBoughtToRender} title="Stocks bought" />
-          )}
-          {merchantsGroupedToRender && (
-            <PieChart
-              data={merchantsGroupedToRender}
-              title="Purchases by merchant name"
-            />
-          )}
-          {merchantsCategoryGroupedToRender && (
-            <PieChart
-              data={merchantsCategoryGroupedToRender}
-              title="Purchases by merchant category"
-            />
-          )} */}
-
           <TradingOverviewOneMonthDisplay
             totalExpensesToRender={totalExpensesToRender}
             merchantsCategoryGroupedToRender={merchantsCategoryGroupedToRender}

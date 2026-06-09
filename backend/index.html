@@ -50,6 +50,22 @@
         <input type="file" id="bank_file" name="bank_file" accept=".csv" required />
         <button type="submit">Upload and analyze</button>
       </form>
+
+      <form action="/verdict/get_verdict" method="post" enctype="multipart/form-data">
+        <h2>Upload both trading and bank files for verdict</h2>
+        <label for="trading_file">Select a CSV file for trading</label>
+        <input type="file" id="trading_file" name="trading_file" accept=".csv"  />
+        <label for="verdict_bank_file">Select a CSV file for bank</label>
+        <input type="file" id="verdict_bank_file" name="bank_file" accept=".csv"  />
+        <button type="submit">Upload and analyze verdict</button>
+        <button type="button" id="clearUploads">Clear uploads</button>
+      </form>
     </div>
+    <script>
+      document.getElementById('clearUploads').addEventListener('click', function() {
+        document.getElementById('trading_file').value = '';
+        document.getElementById('verdict_bank_file').value = '';
+      });
+    </script>
   </body>
 </html>

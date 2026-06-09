@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerdictRouteImport } from './routes/verdict'
 import { Route as Trading_one_monthRouteImport } from './routes/trading_one_month'
 import { Route as Sparkasse_one_monthRouteImport } from './routes/sparkasse_one_month'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VerdictRoute = VerdictRouteImport.update({
+  id: '/verdict',
+  path: '/verdict',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Trading_one_monthRoute = Trading_one_monthRouteImport.update({
   id: '/trading_one_month',
   path: '/trading_one_month',
@@ -33,34 +39,50 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
+  '/verdict': typeof VerdictRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
+  '/verdict': typeof VerdictRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
+  '/verdict': typeof VerdictRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sparkasse_one_month' | '/trading_one_month'
+  fullPaths: '/' | '/sparkasse_one_month' | '/trading_one_month' | '/verdict'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sparkasse_one_month' | '/trading_one_month'
-  id: '__root__' | '/' | '/sparkasse_one_month' | '/trading_one_month'
+  to: '/' | '/sparkasse_one_month' | '/trading_one_month' | '/verdict'
+  id:
+    | '__root__'
+    | '/'
+    | '/sparkasse_one_month'
+    | '/trading_one_month'
+    | '/verdict'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   Sparkasse_one_monthRoute: typeof Sparkasse_one_monthRoute
   Trading_one_monthRoute: typeof Trading_one_monthRoute
+  VerdictRoute: typeof VerdictRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verdict': {
+      id: '/verdict'
+      path: '/verdict'
+      fullPath: '/verdict'
+      preLoaderRoute: typeof VerdictRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trading_one_month': {
       id: '/trading_one_month'
       path: '/trading_one_month'
@@ -89,6 +111,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   Sparkasse_one_monthRoute: Sparkasse_one_monthRoute,
   Trading_one_monthRoute: Trading_one_monthRoute,
+  VerdictRoute: VerdictRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
