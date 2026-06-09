@@ -1,1 +1,5 @@
 __pycache__
+.venv
+.venv-workers
+.wrangler
+python_modules
