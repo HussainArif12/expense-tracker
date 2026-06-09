@@ -1,4 +1,5 @@
 import { useFileSharing } from '#/components/FileSharingContextProvider'
+import { InfoDisplay } from '#/components/InfoDisplay'
 import StackedBarChart from '#/components/StackedBarChart'
 import type { FinancialVerdict } from '#/types/FinancialVerdict'
 import { postFormClient } from '#/utils/post_form'
@@ -12,7 +13,6 @@ export const Route = createFileRoute('/verdict')({
 function RouteComponent() {
   const { setTradingFile, bankingFile, setBankingFile, tradingFile } =
     useFileSharing()
-
   const [outcome, setOutcome] = useState<FinancialVerdict | null>()
 
   const outcomeToRender = useMemo(() => {
@@ -34,6 +34,33 @@ function RouteComponent() {
     ]
     return chartData
   }, [outcome])
+
+  const totals = outcome?.outcome.reduce(
+    (acc, item) => {
+      // Loop through the keys of the object to find numeric values
+      Object.keys(item).forEach((key) => {
+        if (key === 'type') return // Skip the metadata tag
+
+        const value = item[key as keyof typeof item]
+        if (typeof value === 'number') {
+          if (item.type === 'Inflow') {
+            acc.totalInflow += value
+          } else if (item.type === 'Outflow') {
+            acc.totalOutflow += value
+          }
+        }
+      })
+
+      return acc
+    },
+    { totalInflow: 0, totalOutflow: 0 }, // Initial values
+  )
+
+  // Format to 2 decimal places to clear up javascript float math quirks
+  const finalInflow = totals ? Number(totals.totalInflow.toFixed(2)) : 0
+  const finalOutflow = totals ? Number(totals.totalOutflow.toFixed(2)) : 0
+  const finalNet = Number((finalInflow - finalOutflow).toFixed(2))
+
   const handleTradingFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -96,7 +123,21 @@ function RouteComponent() {
           Submit
         </button>
       </form>
-      <div className="grid grid-cols-1 w-full gap-x-1 gap-y-1 my-4">
+      <div className="grid grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
+        {outcome && (
+          <div>
+            {' '}
+            <InfoDisplay title="Net">
+              <h1 className="text-9xl">
+                {finalNet > 0 ? (
+                  <span className="text-green-800">{finalNet}</span>
+                ) : (
+                  <span className="text-red-800">{finalNet}</span>
+                )}
+              </h1>
+            </InfoDisplay>
+          </div>
+        )}
         {/* @ts-ignore I cannot figure out the correct type */}
         {outcomeToRender && <StackedBarChart data={outcomeToRender} />}
       </div>
