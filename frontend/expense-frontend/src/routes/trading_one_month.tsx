@@ -113,7 +113,9 @@ function RouteComponent() {
                     Total without stock:{' '}
                     <span className="font-bold">
                       {' '}
-                      {dataTotalExpenses.total_expenses_sum - stockSum}
+                      {(
+                        dataTotalExpenses.total_expenses_sum - stockSum
+                      ).toFixed(2)}
                     </span>
                   </p>
                 )}
@@ -124,7 +126,7 @@ function RouteComponent() {
             <div className="w-full">
               <InfoDisplay title={'Interest earned'}>
                 <h1 className="text-9xl text-center">
-                  {dataTotalExpenses.interest_earned}
+                  {dataTotalExpenses.interest_earned.toFixed(2)}
                 </h1>
               </InfoDisplay>{' '}
             </div>
@@ -133,7 +135,7 @@ function RouteComponent() {
             <div className="w-full">
               <InfoDisplay title="Cashback">
                 <h1 className="text-9xl text-center">
-                  {dataTotalExpenses.cashback}
+                  {dataTotalExpenses.cashback.toFixed(2)}
                 </h1>
               </InfoDisplay>
             </div>
