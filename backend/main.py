@@ -18,6 +18,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "https://tanstack-start-app.hussainarifkl.workers.dev",
+        "https://expense-tracker.hussainarifkl.workers.dev",
     ],
     allow_credentials=True,
     allow_methods=["*"],
