@@ -63,7 +63,7 @@ jobs:
         with:
           project_id: '${{env.PROJECT_ID}}'
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
-
+          service_account: '${{secrets.GH_EMAIL}}'
       # BEGIN - Docker auth and build
       #
       # If you already have a container image, you can omit these steps.
