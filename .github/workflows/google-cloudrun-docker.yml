@@ -33,7 +33,7 @@ on:
   push:
     branches:
       - "'master'"
-
+  workflow_dispatch:
 env:
   PROJECT_ID: 'expense-tracker-backend-498913' # TODO: update to your Google Cloud project ID
   REGION: 'europe-west10' # TODO: update to your region
