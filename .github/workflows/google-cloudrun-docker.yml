@@ -38,7 +38,7 @@ env:
   PROJECT_ID: 'expense-tracker-backend-498913' # TODO: update to your Google Cloud project ID
   REGION: 'europe-west10' # TODO: update to your region
   SERVICE: 'expense-tracker-backend' # TODO: update to your service name
-  DOCKER_TAG: 'python-fastapi-docker'
+  DOCKER_TAG: 'expense-tracker-image'
   WORKLOAD_IDENTITY_PROVIDER: '${{secrets.GH_SERVICE_ACCOUNT}}' # TODO: update to your workload identity provider
 
 jobs:
@@ -63,7 +63,7 @@ jobs:
         with:
           project_id: '${{env.PROJECT_ID}}'
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
-          #service_account: '${{secrets.GH_EMAIL}}'
+          service_account: '${{secrets.GH_EMAIL}}' # should be there
       # BEGIN - Docker auth and build
       #
       # If you already have a container image, you can omit these steps.
