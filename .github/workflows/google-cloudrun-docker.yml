@@ -76,6 +76,7 @@ jobs:
 
       - name: 'Build and Push Container'
         run: |-
+          gcloud config get-value account
           DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{env.DOCKER_TAG}}:${{ github.sha }}"
           docker build --tag "${DOCKER_TAG}" ./backend
           docker push "${DOCKER_TAG}"
