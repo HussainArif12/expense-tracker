@@ -1,7 +1,5 @@
 from typing import Annotated
-
 from fastapi import Depends, Form, UploadFile
-
 from dependencies.file_parsers import get_filter_path, parse_bank_csv
 
 
