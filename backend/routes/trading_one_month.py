@@ -50,12 +50,17 @@ async def get_trading_analysis(
     interest_earned = interest_earned["Gross Total"].sum()
     cashback = trading_df[trading_df["Action"] == "Spending cashback"]
     cashback = cashback["Gross Total"].sum()
+
+    dividends = trading_df[trading_df["Action"] == "Dividend (Dividend)"]
+    dividends = dividends.groupby(["Name"])["Gross Total"].sum()
+    dividends = dividends.to_dict()
     return {
         "total_expenses": total_expenses_grouped,
         "total_expenses_sum": total_expenses_sum,
         "stocks_only": stocks_only,
         "interest_earned": interest_earned,
         "cashback": cashback,
+        "dividends": dividends,
     }
 
 
