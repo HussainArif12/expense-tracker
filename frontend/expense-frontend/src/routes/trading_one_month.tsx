@@ -3,6 +3,7 @@ import { InfoDisplay } from '#/components/InfoDisplay'
 import { TradingOverviewOneMonthDisplay } from '#/components/TradingOverviewOneMonthDisplay'
 import type { MerchantData } from '#/types/MerchantData'
 import type { TradingOverview } from '#/types/TradingOverview'
+import { getTotalSum } from '#/utils/getTotalSum'
 import { mapRecordToChartData } from '#/utils/mapRecordToChartData'
 import { postFormClient } from '#/utils/post_form'
 import { ClientOnly, createFileRoute } from '@tanstack/react-router'
@@ -19,6 +20,13 @@ function RouteComponent() {
   const [dataTotalExpenses, setDataTotalExpenses] =
     useState<TradingOverview | null>(null)
   const [dataMerchant, setDataMerchant] = useState<MerchantData | null>(null)
+  const [pieMode, setPieMode] = useState<boolean>(false)
+
+  const totalDividendsArray = dataTotalExpenses
+    ? Object.values(dataTotalExpenses.dividends)
+    : [0]
+
+  const totalDividends = getTotalSum(totalDividendsArray)
 
   const totalExpensesToRender = useMemo<ChartDatum[] | undefined>(() => {
     return mapRecordToChartData(dataTotalExpenses?.total_expenses)
@@ -26,6 +34,10 @@ function RouteComponent() {
 
   const stocksBoughtToRender = useMemo<ChartDatum[] | undefined>(() => {
     return mapRecordToChartData(dataTotalExpenses?.stocks_only)
+  }, [dataTotalExpenses])
+
+  const dividendsToRender = useMemo<ChartDatum[] | undefined>(() => {
+    return mapRecordToChartData(dataTotalExpenses?.dividends)
   }, [dataTotalExpenses])
 
   const merchantsGroupedToRender = useMemo<ChartDatum[] | undefined>(() => {
@@ -92,12 +104,21 @@ function RouteComponent() {
             Submit
           </button>
         </form>
+
+        <input
+          type="checkbox"
+          id="pieMode"
+          title="Pie mode"
+          onChange={(event) => setPieMode(event.currentTarget.checked)}
+        />
+        <label htmlFor="pieMode">Pie Mode</label>
+
         <div className="grid grid-cols-3 sm:grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
           {dataTotalExpenses && (
             <div className="w-full">
               <InfoDisplay title={'Total Spent this month (including stocks)'}>
                 <h1 className="text-9xl text-center ">
-                  {dataTotalExpenses.total_expenses_sum}
+                  {dataTotalExpenses.total_expenses_sum.toFixed(2)}
                 </h1>
                 {stockSum && (
                   <p className="text-xl text-center">
@@ -131,6 +152,15 @@ function RouteComponent() {
               </InfoDisplay>
             </div>
           )}
+          {dataTotalExpenses && (
+            <div className="w-full">
+              <InfoDisplay title="Total dividends">
+                <h1 className="text-9xl text-center">
+                  {totalDividends.toFixed(2)}
+                </h1>
+              </InfoDisplay>
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
           <TradingOverviewOneMonthDisplay
@@ -138,6 +168,8 @@ function RouteComponent() {
             merchantsCategoryGroupedToRender={merchantsCategoryGroupedToRender}
             merchantsGroupedToRender={merchantsGroupedToRender}
             stocksBoughtToRender={stocksBoughtToRender}
+            dividendsToRender={dividendsToRender}
+            pieMode={pieMode}
           />
         </div>
       </div>

@@ -8,4 +8,7 @@ export interface TradingOverview {
   }
   interest_earned: number
   cashback: number
+  dividends: {
+    [name: string]: number
+  }
 }
