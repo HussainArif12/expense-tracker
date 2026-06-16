@@ -13,6 +13,8 @@ export interface FinancialOverview {
   costs_grouped: {
     [institutionName: string]: number
   }
-
+  inflow_grouped: {
+    [senderName: string]: number
+  }
   detected_income: IncomeRecord[]
 }

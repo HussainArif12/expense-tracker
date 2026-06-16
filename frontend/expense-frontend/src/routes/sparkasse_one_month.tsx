@@ -21,6 +21,9 @@ function RouteComponent() {
   const totalExpensesToRender = useMemo<ChartDatum[] | undefined>(() => {
     return mapRecordToChartData(bankOverview?.costs_grouped)
   }, [bankOverview])
+  const totalInflowToRender = useMemo<ChartDatum[] | undefined>(() => {
+    return mapRecordToChartData(bankOverview?.inflow_grouped)
+  }, [bankOverview])
 
   const net = useMemo<number | undefined>(() => {
     if (bankOverview)
@@ -47,7 +50,9 @@ function RouteComponent() {
   }
   const dataToRender = [
     { data: totalExpensesToRender, title: 'Total expenses' },
+    { data: totalInflowToRender, title: 'Inflow' },
   ]
+
   return (
     <div className="px-10">
       {bankingFile && (
@@ -109,6 +114,8 @@ function RouteComponent() {
             </InfoDisplay>
           </>
         )}
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
         {totalExpensesToRender && (
           <OverviewDisplay dataToRender={dataToRender} pieMode={pieMode} />
         )}
