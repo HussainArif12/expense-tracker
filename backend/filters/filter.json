@@ -2,24 +2,19 @@
     "remove_bank_rows": [
         {
             "column": "Beguenstigter/Zahlungspflichtiger",
-            "equals": "WOGE Saar Wohnungsgesellschaft Saarland mbH"
+            "equals": [
+                "WOGE Saar Wohnungsgesellschaft Saarland mbH",
+                "J.P. Morgan SE",
+                "Efe Yurtoglu",
+                "Ahmet Efe Yurtoglu"
+            ]
         },
         {
             "column": "Buchungstext",
-            "equals": "GUTSCHR. UEBERWEISUNG"
-        },
-        {
-            "column": "Beguenstigter/Zahlungspflichtiger",
-            "equals": "J.P. Morgan SE"
-        },
-        {
-            "column": "Buchungstext",
-            "equals": "UEBERTRAG (GUTSCHR. UEBERW)"
-        },
-
-        {
-            "column": "Buchungstext",
-            "equals": "ECHTZEIT-GUTSCHRIFT"
+            "equals": [
+                "GUTSCHR. UEBERWEISUNG",
+                "UEBERTRAG (GUTSCHR. UEBERW)"
+            ]
         }
     ]
 }

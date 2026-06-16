@@ -60,6 +60,22 @@
         <button type="submit">Upload and analyze verdict</button>
         <button type="button" id="clearUploads">Clear uploads</button>
       </form>
+      <form action="/bank_multi_month/total_overview" method="post" enctype="multipart/form-data">
+        <h2>Upload both bank multi month</h2>
+        
+        <label for="bank_file">Select a CSV file for bank</label>
+        <input type="file" id="bank_file" name="bank_file" accept=".csv"  />
+        <button type="submit">Upload and analyze verdict</button>
+        <button type="button" id="clearUploads">Clear uploads</button>
+      </form>
+       <form action="/bank_multi_month/grouped_overview" method="post" enctype="multipart/form-data">
+        <h2>Upload both bank multi month</h2>
+        
+        <label for="bank_file">Select a CSV file for bank</label>
+        <input type="file" id="bank_file" name="bank_file" accept=".csv"  />
+        <button type="submit">Upload and analyze verdict</button>
+        <button type="button" id="clearUploads">Clear uploads</button>
+      </form>
     </div>
     <script>
       document.getElementById('clearUploads').addEventListener('click', function() {

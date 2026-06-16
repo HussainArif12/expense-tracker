@@ -10,16 +10,6 @@ router = APIRouter(
 )
 
 
-# 1. Base dependency to load the CSV file
-
-
-# 3. Downstream merchant dependency using our new filter node
-
-# =====================================================================
-# ENDPOINTS (Now all natively inherit your dynamic filter query logic!)
-# =====================================================================
-
-
 @router.post("/total_expenses")
 async def get_trading_analysis(
     trading_df: Annotated[pd.DataFrame, Depends(get_csv_file)],

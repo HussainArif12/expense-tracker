@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 from routes.trading_one_month import router as trading_one_month_router
 from routes.bank_one_month import router as bank_one_month_router
 from routes.verdict import router as verdict_router
+from routes.bank_multi_month import router as bank_multi_month_router
 
 BASE_DIR = Path(__file__).resolve().parent
 INDEX_FILE = BASE_DIR / "index.html"
@@ -34,3 +35,4 @@ async def root():
 app.include_router(trading_one_month_router)
 app.include_router(bank_one_month_router)
 app.include_router(verdict_router)
+app.include_router(bank_multi_month_router)

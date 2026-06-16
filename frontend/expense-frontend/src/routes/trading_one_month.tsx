@@ -1,6 +1,6 @@
 import { useFileSharing } from '#/components/FileSharingContextProvider'
 import { InfoDisplay } from '#/components/InfoDisplay'
-import { TradingOverviewOneMonthDisplay } from '#/components/TradingOverviewOneMonthDisplay'
+import { OverviewDisplay } from '#/components/OverviewDisplay'
 import type { MerchantData } from '#/types/MerchantData'
 import type { TradingOverview } from '#/types/TradingOverview'
 import { getTotalSum } from '#/utils/getTotalSum'
@@ -79,6 +79,19 @@ function RouteComponent() {
     setDataTotalExpenses(totalExpensesResponse)
     setDataMerchant(merchantResponse)
   }
+  const dataToRender = [
+    {
+      data: totalExpensesToRender,
+      title: 'Total expenses by timeframe',
+    },
+    {
+      data: merchantsCategoryGroupedToRender,
+      title: 'Purchases by merchant category',
+    },
+    { data: merchantsGroupedToRender, title: 'Purchases by merchant names' },
+    { data: stocksBoughtToRender, title: 'Stocks bought' },
+    { data: dividendsToRender, title: 'Dividends received' },
+  ]
   return (
     <ClientOnly>
       <div className="px-10">
@@ -113,7 +126,7 @@ function RouteComponent() {
         />
         <label htmlFor="pieMode">Pie Mode</label>
 
-        <div className="grid grid-cols-3 sm:grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
+        <div className="grid  grid-cols-1 lg:grid-cols-2  w-full gap-x-1 gap-y-1 my-4">
           {dataTotalExpenses && (
             <div className="w-full">
               <InfoDisplay title={'Total Spent this month (including stocks)'}>
@@ -162,15 +175,8 @@ function RouteComponent() {
             </div>
           )}
         </div>
-        <div className="grid grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
-          <TradingOverviewOneMonthDisplay
-            totalExpensesToRender={totalExpensesToRender}
-            merchantsCategoryGroupedToRender={merchantsCategoryGroupedToRender}
-            merchantsGroupedToRender={merchantsGroupedToRender}
-            stocksBoughtToRender={stocksBoughtToRender}
-            dividendsToRender={dividendsToRender}
-            pieMode={pieMode}
-          />
+        <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
+          <OverviewDisplay dataToRender={dataToRender} pieMode={pieMode} />
         </div>
       </div>
     </ClientOnly>

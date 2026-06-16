@@ -1,7 +1,7 @@
 'use client'
 import { useFileSharing } from '#/components/FileSharingContextProvider'
 import { InfoDisplay } from '#/components/InfoDisplay'
-import { PieChart } from '#/components/PieChart'
+import { OverviewDisplay } from '#/components/OverviewDisplay'
 import type { ChartDatum } from '#/types/ChartDatum'
 import type { FinancialOverview } from '#/types/FinancialOverview'
 import { mapRecordToChartData } from '#/utils/mapRecordToChartData'
@@ -16,6 +16,7 @@ export const Route = createFileRoute('/sparkasse_one_month')({
 function RouteComponent() {
   const [bankOverview, setBankOverview] = useState<FinancialOverview | null>()
   const { setBankingFile, bankingFile } = useFileSharing()
+  const [pieMode, setPieMode] = useState<boolean>(false)
 
   const totalExpensesToRender = useMemo<ChartDatum[] | undefined>(() => {
     return mapRecordToChartData(bankOverview?.costs_grouped)
@@ -44,7 +45,9 @@ function RouteComponent() {
 
     setBankOverview(bankOverviewResponse)
   }
-
+  const dataToRender = [
+    { data: totalExpensesToRender, title: 'Total expenses' },
+  ]
   return (
     <div className="px-10">
       {bankingFile && (
@@ -75,9 +78,16 @@ function RouteComponent() {
           Submit
         </button>
       </form>
-      <div className="grid grid-cols-1 w-full gap-x-1 gap-y-1 my-4 ">
+      <input
+        type="checkbox"
+        id="pieMode"
+        title="Pie mode"
+        onChange={(event) => setPieMode(event.currentTarget.checked)}
+      />
+      <label htmlFor="pieMode">Pie Mode</label>
+      <div className="grid lg:grid-cols-2 grid-cols-1 w-full gap-x-1 gap-y-1 my-4 ">
         {bankOverview && (
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-1 sm:gap-y-1">
+          <>
             <InfoDisplay title="Outflow">
               <h1 className="text-8xl lg:text-9xl text-center text-red-800">
                 {bankOverview.outflow.toFixed(2)}
@@ -97,13 +107,10 @@ function RouteComponent() {
                 )}
               </h1>
             </InfoDisplay>
-          </div>
+          </>
         )}
         {totalExpensesToRender && (
-          <PieChart
-            data={totalExpensesToRender}
-            title="Outflow grouped by merchant"
-          />
+          <OverviewDisplay dataToRender={dataToRender} pieMode={pieMode} />
         )}
       </div>
     </div>

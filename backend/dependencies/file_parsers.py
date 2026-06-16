@@ -23,7 +23,10 @@ def parse_bank_csv(
     df = pd.read_csv(
         io.BytesIO(contents), encoding="unicode_escape", sep=";", decimal=","
     )
+    df["Buchungstag"] = pd.to_datetime(df["Buchungstag"], format="%d.%m.%y")
 
+    # 2. Extract Month & Year as a string (e.g., "2026-05")
+    df["Month & Year"] = df["Buchungstag"].dt.strftime("%Y-%m")
     df = df.filter(
         items=[
             "Buchungstag",
@@ -31,6 +34,7 @@ def parse_bank_csv(
             "Verwendungszweck",
             "Beguenstigter/Zahlungspflichtiger",
             "Betrag",
+            "Month & Year",
         ]
     )
 
@@ -39,22 +43,19 @@ def parse_bank_csv(
 
         for column, values in filters.items():
             for value in values:
-                df_column = value["column"]
-                df_value = value["equals"]
+                df_column = value.get("column")
+                df_values = value.get("equals", [])
 
+                if df_column not in df.columns:
+                    continue
+
+                # keep rows where column value is in the provided list
                 if column == BankFilter.INCLUDE_BANK_ROWS.value:
-                    df = (
-                        df.loc[df[df_column] == df_value]
-                        if df_column in df.columns
-                        else df
-                    )
+                    df = df.loc[df[df_column].isin(df_values)]
 
+                # remove rows where column value is in the provided list
                 if column == BankFilter.REMOVE_BANK_ROWS.value:
-                    df = (
-                        df.loc[df[df_column] != df_value]
-                        if df_column in df.columns
-                        else df
-                    )
+                    df = df.loc[~df[df_column].isin(df_values)]
 
     return df
 

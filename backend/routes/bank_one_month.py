@@ -17,9 +17,13 @@ async def get_bank_analysis(
     inflow = bank_df[bank_df["Betrag"] > 0]
     costs["Betrag"] = costs["Betrag"].abs()
 
-    outflow = costs["Betrag"].sum().item()
-    inflow = bank_df[bank_df["Betrag"] > 0]
+    outflow_total = costs["Betrag"].sum().item()
     inflow_total = inflow["Betrag"].sum().item()
+
+    inflow_grouped = inflow.groupby(["Beguenstigter/Zahlungspflichtiger"])[
+        "Betrag"
+    ].sum()
+    inflow_grouped = inflow_grouped.to_dict()
 
     costs_grouped = costs.groupby(["Beguenstigter/Zahlungspflichtiger"])["Betrag"].sum()
     costs_grouped = costs_grouped.to_dict()
@@ -33,11 +37,9 @@ async def get_bank_analysis(
         income,
     )
     return {
-        "outflow": outflow,
+        "outflow": outflow_total,
         "inflow": inflow_total,
         "costs_grouped": costs_grouped,
+        "inflow_grouped": inflow_grouped,
         "detected_income": income,
     }
-
-
-
