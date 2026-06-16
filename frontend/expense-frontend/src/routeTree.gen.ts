@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerdictRouteImport } from './routes/verdict'
 import { Route as Trading_one_monthRouteImport } from './routes/trading_one_month'
+import { Route as Trading_multi_monthRouteImport } from './routes/trading_multi_month'
 import { Route as Sparkasse_one_monthRouteImport } from './routes/sparkasse_one_month'
+import { Route as Sparkasse_multi_monthRouteImport } from './routes/sparkasse_multi_month'
 import { Route as IndexRouteImport } from './routes/index'
 
 const VerdictRoute = VerdictRouteImport.update({
@@ -24,9 +26,19 @@ const Trading_one_monthRoute = Trading_one_monthRouteImport.update({
   path: '/trading_one_month',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Trading_multi_monthRoute = Trading_multi_monthRouteImport.update({
+  id: '/trading_multi_month',
+  path: '/trading_multi_month',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Sparkasse_one_monthRoute = Sparkasse_one_monthRouteImport.update({
   id: '/sparkasse_one_month',
   path: '/sparkasse_one_month',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Sparkasse_multi_monthRoute = Sparkasse_multi_monthRouteImport.update({
+  id: '/sparkasse_multi_month',
+  path: '/sparkasse_multi_month',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,39 +49,61 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sparkasse_multi_month': typeof Sparkasse_multi_monthRoute
   '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
+  '/trading_multi_month': typeof Trading_multi_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
   '/verdict': typeof VerdictRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sparkasse_multi_month': typeof Sparkasse_multi_monthRoute
   '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
+  '/trading_multi_month': typeof Trading_multi_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
   '/verdict': typeof VerdictRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sparkasse_multi_month': typeof Sparkasse_multi_monthRoute
   '/sparkasse_one_month': typeof Sparkasse_one_monthRoute
+  '/trading_multi_month': typeof Trading_multi_monthRoute
   '/trading_one_month': typeof Trading_one_monthRoute
   '/verdict': typeof VerdictRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sparkasse_one_month' | '/trading_one_month' | '/verdict'
+  fullPaths:
+    | '/'
+    | '/sparkasse_multi_month'
+    | '/sparkasse_one_month'
+    | '/trading_multi_month'
+    | '/trading_one_month'
+    | '/verdict'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sparkasse_one_month' | '/trading_one_month' | '/verdict'
+  to:
+    | '/'
+    | '/sparkasse_multi_month'
+    | '/sparkasse_one_month'
+    | '/trading_multi_month'
+    | '/trading_one_month'
+    | '/verdict'
   id:
     | '__root__'
     | '/'
+    | '/sparkasse_multi_month'
     | '/sparkasse_one_month'
+    | '/trading_multi_month'
     | '/trading_one_month'
     | '/verdict'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Sparkasse_multi_monthRoute: typeof Sparkasse_multi_monthRoute
   Sparkasse_one_monthRoute: typeof Sparkasse_one_monthRoute
+  Trading_multi_monthRoute: typeof Trading_multi_monthRoute
   Trading_one_monthRoute: typeof Trading_one_monthRoute
   VerdictRoute: typeof VerdictRoute
 }
@@ -90,11 +124,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Trading_one_monthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trading_multi_month': {
+      id: '/trading_multi_month'
+      path: '/trading_multi_month'
+      fullPath: '/trading_multi_month'
+      preLoaderRoute: typeof Trading_multi_monthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sparkasse_one_month': {
       id: '/sparkasse_one_month'
       path: '/sparkasse_one_month'
       fullPath: '/sparkasse_one_month'
       preLoaderRoute: typeof Sparkasse_one_monthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sparkasse_multi_month': {
+      id: '/sparkasse_multi_month'
+      path: '/sparkasse_multi_month'
+      fullPath: '/sparkasse_multi_month'
+      preLoaderRoute: typeof Sparkasse_multi_monthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -109,7 +157,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Sparkasse_multi_monthRoute: Sparkasse_multi_monthRoute,
   Sparkasse_one_monthRoute: Sparkasse_one_monthRoute,
+  Trading_multi_monthRoute: Trading_multi_monthRoute,
   Trading_one_monthRoute: Trading_one_monthRoute,
   VerdictRoute: VerdictRoute,
 }

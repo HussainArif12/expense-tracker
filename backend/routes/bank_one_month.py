@@ -2,7 +2,6 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 import pandas as pd
-import json
 from dependencies.open_bank_file import get_bank_file
 
 router = APIRouter(prefix="/bank_one_month")
@@ -27,19 +26,21 @@ async def get_bank_analysis(
 
     costs_grouped = costs.groupby(["Beguenstigter/Zahlungspflichtiger"])["Betrag"].sum()
     costs_grouped = costs_grouped.to_dict()
-    INCOME_KEYS = ["LOHN", "GEHALT"]
 
-    income = bank_df[
-        bank_df["Buchungstext"].str.contains("|".join(INCOME_KEYS))
-    ]  # ["Betrag"].sum()
-    income = income.to_json(orient="records")
-    income = json.loads(
-        income,
-    )
+    costs_grouped_by_time = costs.copy()
+    costs_grouped_by_time["Buchungstag"] = pd.to_datetime(
+        costs_grouped_by_time["Buchungstag"]
+    ).dt.day
+    costs_grouped_by_time = costs_grouped_by_time.groupby(["Buchungstag"])[
+        "Betrag"
+    ].sum()
+
+    costs_grouped_by_time = costs_grouped_by_time.to_dict()
+
     return {
         "outflow": outflow_total,
         "inflow": inflow_total,
         "costs_grouped": costs_grouped,
         "inflow_grouped": inflow_grouped,
-        "detected_income": income,
+        "costs_grouped_by_time": costs_grouped_by_time,
     }

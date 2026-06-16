@@ -45,11 +45,11 @@ function RouteComponent() {
       '/bank_one_month/total_overview',
       formData,
     )
-
+    console.log(bankOverviewResponse)
     setBankOverview(bankOverviewResponse)
   }
   const dataToRender = [
-    { data: totalExpensesToRender, title: 'Total expenses' },
+    { data: totalExpensesToRender, title: 'Total expenses by merchant' },
     { data: totalInflowToRender, title: 'Inflow' },
   ]
 
@@ -115,7 +115,7 @@ function RouteComponent() {
           </>
         )}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
+      <div className="grid lg:grid-cols-2 grid-cols-1 w-full gap-x-1 gap-y-1 my-4">
         {totalExpensesToRender && (
           <OverviewDisplay dataToRender={dataToRender} pieMode={pieMode} />
         )}
