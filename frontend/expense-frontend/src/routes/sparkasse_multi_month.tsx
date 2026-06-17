@@ -18,7 +18,8 @@ function RouteComponent() {
   const [merchantOverview, setMerchantOverview] =
     useState<MerchantGroupedSparkasse>()
   const [bankingFile, setBankingFile] = useState<File | null>()
-
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false)
   const net = multiMonthOverview
     ? multiMonthOverview.inflow_total - multiMonthOverview.outflow_total
     : 0
@@ -48,18 +49,22 @@ function RouteComponent() {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!bankingFile) return
-
+    setIsLoading(true)
     const formData = new FormData()
     formData.append('bank_file', bankingFile)
+    try {
+      const [bankOverviewResponse, merchantOverviewResponse] =
+        await Promise.all([
+          postFormClient('/bank_multi_month/total_overview', formData),
+          postFormClient('/bank_multi_month/merchant_overview', formData),
+        ])
 
-    const [bankOverviewResponse, merchantOverviewResponse] = await Promise.all([
-      postFormClient('/bank_multi_month/total_overview', formData),
-      postFormClient('/bank_multi_month/merchant_overview', formData),
-    ])
-    console.log(bankOverviewResponse)
-    console.log(merchantOverview)
-    setMerchantOverview(merchantOverviewResponse)
-    setMultiMonthOverview(bankOverviewResponse)
+      setMerchantOverview(merchantOverviewResponse)
+      setMultiMonthOverview(bankOverviewResponse)
+    } catch (e) {
+      setIsError(true)
+    }
+    setIsLoading(false)
   }
 
   return (
@@ -92,8 +97,12 @@ function RouteComponent() {
           Submit
         </button>
       </form>
-
-      <label htmlFor="pieMode">Pie Mode</label>
+      {isLoading && <p className="text-blue-800">Loading..</p>}
+      {isError && (
+        <p className="text-pink-800">
+          Error! Contact the developer for details
+        </p>
+      )}
       <div className="grid lg:grid-cols-2 grid-cols-1 w-full gap-x-1 gap-y-1 my-4 ">
         {multiMonthOverview && (
           <>

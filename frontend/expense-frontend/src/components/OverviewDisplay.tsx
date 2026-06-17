@@ -5,7 +5,10 @@ import { InfoDisplay } from './InfoDisplay'
 import { BarChart } from './BarChart'
 
 type TradingOverviewOneMonthDisplay = {
-  dataToRender: { data: ChartDatum[] | undefined; title: string }[]
+  dataToRender: {
+    data: { name: string; value: number }[] | undefined
+    title: string
+  }[]
   pieMode: boolean
 }
 type ModeSwitcherProps = {
@@ -50,7 +53,7 @@ export const OverviewDisplay: React.FC<TradingOverviewOneMonthDisplay> = ({
                 pieMode={pieMode}
                 PieModeComponent={PieChart}
                 ChartModeComponent={BarChart}
-                data={section.data}
+                data={section.data as ChartDatum[]}
               />
             </InfoDisplay>
           ),

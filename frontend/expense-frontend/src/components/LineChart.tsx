@@ -27,9 +27,9 @@ export const LineChart: React.FC<LineChartProps> = ({ data, xAxisKey }) => {
     <RechartsLineChart
       style={{
         width: '100%',
-        maxWidth: '850px',
+        minWidth: '30vh',
         height: '90%',
-        maxHeight: '800vh',
+        // maxHeight: '800vh',
         paddingTop: '10%',
       }}
       responsive

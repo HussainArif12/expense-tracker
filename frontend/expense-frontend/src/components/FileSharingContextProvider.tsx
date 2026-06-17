@@ -18,7 +18,7 @@ export function FileSharingContextProvider({
 }: FileSharingContextProviderProps) {
   const [tradingFile, setTradingFile] = useState<File | null>(null)
   const [bankingFile, setBankingFile] = useState<File | null>(null)
-  console.log(bankingFile, tradingFile)
+
   return (
     <FileSharingContext.Provider
       value={{ tradingFile, bankingFile, setTradingFile, setBankingFile }}
