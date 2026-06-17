@@ -19,8 +19,10 @@ export const BarChart: React.FC<BarChartProps> = ({ data }) => {
       <RechartsBarChart
         style={{
           width: '100%',
-          maxWidth: '850px',
-          maxHeight: '80vh',
+          //   maxWidth: '850px',
+          // minWidth: '30vh',
+          minHeight: '51vh',
+          height: '100%',
           aspectRatio: 1.7,
           paddingTop: '10%',
         }}

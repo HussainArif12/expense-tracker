@@ -23,6 +23,8 @@ function RouteComponent() {
         'Bank Inflow':
           outcome.outcome.find((i) => i.bank_inflow)?.bank_inflow || 0,
         'Trading Inflow': 0, // Hardcoded or dynamic fallback if needed later
+        'Bank Outflow': 0,
+        'Trading Outflow': 0,
       },
       {
         name: 'Outflow',
@@ -30,6 +32,8 @@ function RouteComponent() {
           outcome.outcome.find((i) => i.bank_outflow)?.bank_outflow || 0,
         'Trading Outflow':
           outcome.outcome.find((i) => i.trading_outflow)?.trading_outflow || 0,
+        'Bank Inflow': 0,
+        'Trading Inflow': 0,
       },
     ]
     return chartData
@@ -88,45 +92,57 @@ function RouteComponent() {
       {tradingFile && <p>Trading file {tradingFile.name} uploaded</p>}
       {bankingFile && <p>Banking file {bankingFile.name} uploaded</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <label
-          htmlFor="trading_file"
-          className="block text-sm font-medium text-slate-700"
-        >
-          Upload T212 statement
-        </label>
-        <input
-          id="trading_file"
-          type="file"
-          accept=".csv"
-          onChange={handleTradingFileChange}
-          className="bg-yellow-300 rounded-md p-1"
-        />
+        <div className="flex flex-row gap-x-2">
+          <label
+            htmlFor="trading_file"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Upload T212 statement
+          </label>
+          <input
+            id="trading_file"
+            type="file"
+            accept=".csv"
+            onChange={handleTradingFileChange}
+            className="bg-yellow-300 rounded-md p-1"
+          />
 
-        <label
-          htmlFor="banking_file"
-          className="block text-sm font-medium text-slate-700"
-        >
-          Upload Bank statement
-        </label>
-        <input
-          id="banking_file"
-          type="file"
-          accept=".csv"
-          onChange={handleBankingFileChange}
-          className="bg-yellow-300 rounded-md p-1"
-        />
-        <button
-          type="submit"
-          disabled={!(tradingFile || bankingFile)}
-          className="bg-blue-300 rounded-md p-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
-        >
-          Submit
-        </button>
+          <label
+            htmlFor="banking_file"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Upload Bank statement
+          </label>
+          <input
+            id="banking_file"
+            type="file"
+            accept=".csv"
+            onChange={handleBankingFileChange}
+            className="bg-yellow-300 rounded-md p-1"
+          />
+          <button
+            type="submit"
+            disabled={!(tradingFile || bankingFile)}
+            className="bg-blue-300 rounded-md p-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+          >
+            Submit
+          </button>
+        </div>
       </form>
-      <div className="grid grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
+      <div>
         {outcome && (
-          <div>
+          <div className="grid grid-cols-2 w-full gap-x-1 gap-y-1 my-4">
             {' '}
+            <InfoDisplay title="Inflow">
+              <h1 className="text-9xl text-green-800">
+                {finalInflow.toFixed(2)}
+              </h1>
+            </InfoDisplay>
+            <InfoDisplay title="Outflow">
+              <h1 className="text-9xl text-red-800">
+                {finalOutflow.toFixed(2)}
+              </h1>
+            </InfoDisplay>
             <InfoDisplay title="Net">
               <h1 className="text-9xl">
                 {finalNet > 0 ? (
@@ -136,11 +152,25 @@ function RouteComponent() {
                 )}
               </h1>
             </InfoDisplay>
+            <InfoDisplay title="Savings rate">
+              <h1
+                className={`text-9xl ${finalNet < 0 ? 'text-red-800' : 'text-green-800'}`}
+              >
+                {((finalNet / finalInflow) * 100).toFixed(2)}
+              </h1>
+            </InfoDisplay>
           </div>
         )}
-        {/* @ts-ignore I cannot figure out the correct type */}
-        {outcomeToRender && <StackedBarChart data={outcomeToRender} />}
       </div>
+      {outcomeToRender && (
+        <InfoDisplay
+          title="Cash flow breakdown"
+          showFullScreen
+          cssOverrideParent="h-[600px]"
+        >
+          <StackedBarChart data={outcomeToRender} />
+        </InfoDisplay>
+      )}
     </div>
   )
 }

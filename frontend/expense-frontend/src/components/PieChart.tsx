@@ -24,8 +24,11 @@ export const PieChart: React.FC<PieChartDataProps> = ({ data }) => {
       reverseStackOrder={true}
       style={{
         width: '100%',
-        maxWidth: '880px',
-        maxHeight: '90vh',
+        minWidth: '30vh',
+        //  maxWidth: '880px',
+        height: '100%',
+        // maxHeight: '900vh',
+        minHeight: '52vh',
         aspectRatio: 1.7,
         paddingTop: '10%',
       }}
@@ -35,7 +38,7 @@ export const PieChart: React.FC<PieChartDataProps> = ({ data }) => {
         dataKey={'value'}
         cx="50%" // Centers the pie horizontally
         cy="50%"
-        outerRadius="90%"
+        outerRadius={'90%'}
         shape={MyCustomPie}
         label={renderCustomizedLabel}
       />

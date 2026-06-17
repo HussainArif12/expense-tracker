@@ -44,6 +44,7 @@ export const OverviewDisplay: React.FC<TradingOverviewOneMonthDisplay> = ({
               cssOverrideParent="h-[600px]"
               title={section.title}
               key={index}
+              showFullScreen
             >
               <ModeSwitcher
                 pieMode={pieMode}

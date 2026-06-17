@@ -1,11 +1,3 @@
-export interface IncomeRecord {
-  Buchungstag: string
-  Buchungstext: string
-  Verwendungszweck: string
-  'Beguenstigter/Zahlungspflichtiger': string
-  Betrag: number
-}
-
 export interface FinancialOverview {
   outflow: number
   inflow: number
@@ -16,5 +8,7 @@ export interface FinancialOverview {
   inflow_grouped: {
     [senderName: string]: number
   }
-  detected_income: IncomeRecord[]
+  costs_grouped_by_time: {
+    [dayNumber: string]: number
+  }
 }

@@ -25,6 +25,10 @@ function RouteComponent() {
     return mapRecordToChartData(bankOverview?.inflow_grouped)
   }, [bankOverview])
 
+  const groupedByTimeExpenses = useMemo<ChartDatum[] | undefined>(() => {
+    return mapRecordToChartData(bankOverview?.costs_grouped_by_time)
+  }, [bankOverview])
+
   const net = useMemo<number | undefined>(() => {
     if (bankOverview)
       return Number((bankOverview.inflow - bankOverview.outflow).toFixed(2))
@@ -45,12 +49,12 @@ function RouteComponent() {
       '/bank_one_month/total_overview',
       formData,
     )
-    console.log(bankOverviewResponse)
     setBankOverview(bankOverviewResponse)
   }
   const dataToRender = [
     { data: totalExpensesToRender, title: 'Total expenses by merchant' },
     { data: totalInflowToRender, title: 'Inflow' },
+    { data: groupedByTimeExpenses, title: 'Expenses grouped by day number' },
   ]
 
   return (
@@ -105,10 +109,19 @@ function RouteComponent() {
             </InfoDisplay>
             <InfoDisplay title="Net">
               <h1 className="text-8xl lg:text-9xl text-green-800">
-                {net && net < 0 ? (
-                  <span className="text-red-800">{net}</span>
-                ) : (
-                  <span className="text-green-800">{net}</span>
+                {net && (
+                  <span className={net < 0 ? 'text-red-800' : 'text-green-800'}>
+                    {net}
+                  </span>
+                )}
+              </h1>
+            </InfoDisplay>
+            <InfoDisplay title="Savings rate">
+              <h1 className="text-8xl lg:text-9xl">
+                {net && (
+                  <span className={net < 0 ? 'text-red-800' : 'text-green-800'}>
+                    {((net / bankOverview.inflow) * 100).toFixed(2)}%
+                  </span>
                 )}
               </h1>
             </InfoDisplay>
