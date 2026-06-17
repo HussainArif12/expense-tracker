@@ -1,87 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Upload Trading CSV</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        margin: 2rem;
-        background: #f5f7fb;
-      }
-      .container {
-        max-width: 600px;
-        padding: 2rem;
-        margin: auto;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 16px 40px rgba(30, 54, 102, 0.12);
-      }
-      label,
-      button {
-        display: block;
-        margin-top: 1rem;
-      }
-      button {
-        padding: 0.75rem 1.2rem;
-        border: none;
-        background: #2563eb;
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      button:hover {
-        background: #1d4ed8;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Upload your trading CSV file</h1>
-      <form action="/trading_month/total_expenses" method="post" enctype="multipart/form-data">
-        <label for="csvFile">Select a CSV file</label>
-        <input type="file" id="csvFile" name="csvFile" accept=".csv" required />
-        <button type="submit">Upload and analyze</button>
-      </form>
-      
-      <form action="/bank_one_month/total_overview" method="post" enctype="multipart/form-data">
-        <label for="bank_file">Select a CSV file for bank</label>
-        <input type="file" id="bank_file" name="bank_file" accept=".csv" required />
-        <button type="submit">Upload and analyze</button>
-      </form>
 
-      <form action="/verdict/get_verdict" method="post" enctype="multipart/form-data">
-        <h2>Upload both trading and bank files for verdict</h2>
-        <label for="trading_file">Select a CSV file for trading</label>
-        <input type="file" id="trading_file" name="trading_file" accept=".csv"  />
-        <label for="verdict_bank_file">Select a CSV file for bank</label>
-        <input type="file" id="verdict_bank_file" name="bank_file" accept=".csv"  />
-        <button type="submit">Upload and analyze verdict</button>
-        <button type="button" id="clearUploads">Clear uploads</button>
-      </form>
-      <form action="/bank_multi_month/total_overview" method="post" enctype="multipart/form-data">
-        <h2>Upload both bank multi month</h2>
-        
-        <label for="bank_file">Select a CSV file for bank</label>
-        <input type="file" id="bank_file" name="bank_file" accept=".csv"  />
-        <button type="submit">Upload and analyze verdict</button>
-        <button type="button" id="clearUploads">Clear uploads</button>
-      </form>
-       <form action="/bank_multi_month/grouped_overview" method="post" enctype="multipart/form-data">
-        <h2>Upload both bank multi month</h2>
-        
-        <label for="bank_file">Select a CSV file for bank</label>
-        <input type="file" id="bank_file" name="bank_file" accept=".csv"  />
-        <button type="submit">Upload and analyze verdict</button>
-        <button type="button" id="clearUploads">Clear uploads</button>
-      </form>
-    </div>
-    <script>
-      document.getElementById('clearUploads').addEventListener('click', function() {
-        document.getElementById('trading_file').value = '';
-        document.getElementById('verdict_bank_file').value = '';
-      });
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Trading CSV</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background: #f5f7fb;
+    }
+
+    .container {
+      max-width: 600px;
+      padding: 2rem;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(30, 54, 102, 0.12);
+    }
+
+    label,
+    button {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    button {
+      padding: 0.75rem 1.2rem;
+      border: none;
+      background: #2563eb;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Upload your trading CSV file</h1>
+    <form action="/trading_month/total_expenses" method="post" enctype="multipart/form-data">
+      <label for="csvFile">Select a CSV file</label>
+      <input type="file" id="csvFile" name="csvFile" accept=".csv" required />
+      <button type="submit">Upload and analyze</button>
+    </form>
+
+    <form action="/bank_one_month/total_overview" method="post" enctype="multipart/form-data">
+      <label for="bank_file">Select a CSV file for bank</label>
+      <input type="file" id="bank_file" name="bank_file" accept=".csv" required />
+      <button type="submit">Upload and analyze</button>
+    </form>
+
+    <form action="/verdict/get_verdict" method="post" enctype="multipart/form-data">
+      <h2>Upload both trading and bank files for verdict</h2>
+      <label for="trading_file">Select a CSV file for trading</label>
+      <input type="file" id="trading_file" name="trading_file" accept=".csv" />
+      <label for="verdict_bank_file">Select a CSV file for bank</label>
+      <input type="file" id="verdict_bank_file" name="bank_file" accept=".csv" />
+      <button type="submit">Upload and analyze verdict</button>
+      <button type="button" id="clearUploads">Clear uploads</button>
+    </form>
+    <form action="/bank_multi_month/total_overview" method="post" enctype="multipart/form-data">
+      <h2>Upload both bank multi month</h2>
+
+      <label for="bank_file">Select a CSV file for bank</label>
+      <input type="file" id="bank_file" name="bank_file" accept=".csv" />
+      <button type="submit">Upload and analyze verdict</button>
+      <button type="button" id="clearUploads">Clear uploads</button>
+    </form>
+    <form action="/bank_multi_month/grouped_overview" method="post" enctype="multipart/form-data">
+      <h2>Upload both bank multi month</h2>
+
+      <label for="bank_file">Select a CSV file for bank</label>
+      <input type="file" id="bank_file" name="bank_file" accept=".csv" />
+      <button type="submit">Upload and analyze verdict</button>
+      <button type="button" id="clearUploads">Clear uploads</button>
+    </form>
+    <form action="/trading_multi_month/total_expenses" method="post" enctype="multipart/form-data">
+      <label for="csvFile">Select trading file multi month</label>
+      <input type="file" id="csvFile" name="csvFile" accept=".csv" />
+      <button type="submit">Submit multi month T212</button>
+    </form>
+    <form action="/trading_multi_month/grouped_data" method="post" enctype="multipart/form-data">
+      <label for="csvFile">Select trading file multi month data</label>
+      <input type="file" id="csvFile" name="csvFile" accept=".csv" />
+      <button type="submit">Submit multi month T212</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('clearUploads').addEventListener('click', function () {
+      document.getElementById('trading_file').value = '';
+      document.getElementById('verdict_bank_file').value = '';
+    });
+  </script>
+</body>
+
 </html>
