@@ -1,0 +1,8 @@
+node_modules
+.wrangler
+.tanstack
+.vscode
+.git
+.gitignore
+.env
+dist

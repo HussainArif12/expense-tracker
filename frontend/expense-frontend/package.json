@@ -14,7 +14,8 @@
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
     "check": "prettier --check .",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.26.0",
@@ -28,11 +29,13 @@
     "@tanstack/router-plugin": "^1.132.0",
     "@types/plotly.js": "^3.0.10",
     "lucide-react": "^0.545.0",
+    "nitro": "^3.0.260610-beta",
     "plotly.js": "^3.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-plotly.js": "^2.6.0",
     "recharts": "^3.8.1",
+    "srvx": "^0.11.17",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
