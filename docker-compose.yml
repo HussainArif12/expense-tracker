@@ -1,0 +1,18 @@
+services:
+  backend:
+    image: ghcr.io/hussainarif12/expense-tracker/backend:master
+    ports:
+      - "8000:8000"
+      # you can find the sample filter file within the /backend directory. This is optional.
+      # make sure you have ONE file within /filters called 'filter.json'
+    # volumes:
+    #   - ./filters:/app/filters
+  frontend:
+    image: ghcr.io/hussainarif12/expense-tracker/frontend:master
+    ports:
+      - "3000:3000"
+    command: sh clear_all_files_and_run.sh
+    volumes:
+      - ./clear_all_files_and_run.sh:/app/clear_all_files_and_run.sh
+      # sample .env file is in the .env.sample file.
+      - ./.env:/app/.env
