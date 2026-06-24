@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 #RUN npm run build
-RUN rm -rf node_modules
+#RUN rm -rf node_modules
 EXPOSE 3000
 CMD ["npm", "run", "build"]
 
