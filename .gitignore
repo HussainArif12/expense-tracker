@@ -3,3 +3,6 @@ __pycache__
 .venv-workers
 .wrangler
 python_modules
+.vscode
+.conda
+.env
