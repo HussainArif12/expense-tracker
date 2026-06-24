@@ -24,7 +24,7 @@ origins = (
         "https://tanstack-start-app.hussainarifkl.workers.dev",
         "https://expense-tracker.hussainarifkl.workers.dev",
     ]
-    if SELF_HOST
+    if not SELF_HOST
     else ["*"]
 )
 
