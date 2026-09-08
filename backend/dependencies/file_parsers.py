@@ -24,12 +24,13 @@ def parse_bank_csv(
         io.BytesIO(contents), encoding="unicode_escape", sep=";", decimal=","
     )
     df["Buchungstag"] = pd.to_datetime(df["Buchungstag"], format="%d.%m.%y")
-
+    df["Valutadatum"] = pd.to_datetime(df["Valutadatum"], format="%d.%m.%y")
     # 2. Extract Month & Year as a string (e.g., "2026-05")
-    df["Month & Year"] = df["Buchungstag"].dt.strftime("%Y-%m")
+    df["Month & Year"] = df["Valutadatum"].dt.strftime("%Y-%m")
     df = df.filter(
         items=[
             "Buchungstag",
+            "Valutadatum",
             "Buchungstext",
             "Verwendungszweck",
             "Beguenstigter/Zahlungspflichtiger",
@@ -61,23 +62,27 @@ def parse_bank_csv(
 
 
 def parse_trading_csv(contents: bytes) -> pd.DataFrame:
+    TIME_COLUMN = "Time (UTC)"
+    TIME_ORIGINAL = "Time"
     trading_df = pd.read_csv(io.BytesIO(contents), sep=",")
 
-    trading_df["Time"] = pd.to_datetime(trading_df["Time"])
-    trading_df["Month & Year"] = trading_df["Time"].dt.strftime("%Y-%m")
-    trading_df["Time"] = trading_df["Time"].dt.date
+    trading_df[TIME_COLUMN] = pd.to_datetime(trading_df[TIME_COLUMN])
+    trading_df["Month & Year"] = trading_df[TIME_COLUMN].dt.strftime("%Y-%m")
+    trading_df[TIME_ORIGINAL] = trading_df[TIME_COLUMN].dt.date
 
-    trading_df = trading_df.filter(
-        items=[
-            "Action",
-            "Time",
-            "Name",
-            "Merchant name",
-            "Merchant category",
-            "Gross Total",
-            "Month & Year",
-            "Notes",
-        ]
-    )
+    columns = [
+        "Action",
+        TIME_ORIGINAL,
+        "Merchant name",
+        "Merchant category",
+        "Gross Total",
+        "Month & Year",
+        "Notes",
+    ]
+
+    if "Name" in trading_df.columns:
+        columns.append("Name")
+
+    trading_df = trading_df.filter(items=columns)
 
     return trading_df

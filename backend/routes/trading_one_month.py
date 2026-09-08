@@ -21,7 +21,6 @@ async def get_trading_analysis(
 
     # Cast dates to strings right before converting to dictionaries to avoid key errors
     trading_df_negative["Time"] = trading_df_negative["Time"].astype(str)
-
     trading_df_negative["Gross Total"] = trading_df_negative["Gross Total"].map(
         lambda x: round(abs(x), 2)
     )
@@ -30,27 +29,37 @@ async def get_trading_analysis(
     total_expenses_grouped = trading_df_negative.groupby(["Time"])["Gross Total"].sum()
     total_expenses_grouped = total_expenses_grouped.to_dict()
 
-    stocks_only = trading_df_negative[
+    stocks_only = {}
+    dividends = {}
+    market_buys = trading_df_negative[
         trading_df_negative["Action"] == "Market buy"
     ].copy()
-    stocks_only = stocks_only.groupby(["Name"])["Gross Total"].sum()
-    stocks_only = stocks_only.to_dict()
+
+    if "Name" in market_buys.columns:
+        stocks_only = market_buys.groupby(["Name"])["Gross Total"].sum().to_dict()
+        dividends = (
+            trading_df[trading_df["Action"] == "Dividend (Dividend)"]
+            .groupby(["Name"])["Gross Total"]
+            .sum()
+            .to_dict()
+        )
 
     interest_earned = trading_df[trading_df["Action"] == "Interest on cash"]
     interest_earned = interest_earned["Gross Total"].sum()
     cashback = trading_df[trading_df["Action"] == "Spending cashback"]
     cashback = cashback["Gross Total"].sum()
 
-    dividends = trading_df[trading_df["Action"] == "Dividend (Dividend)"]
-    dividends = dividends.groupby(["Name"])["Gross Total"].sum()
-    dividends = dividends.to_dict()
+    fields_to_return = {
+        "stocks_only": stocks_only,
+        "dividends": dividends,
+    }
+
     return {
         "total_expenses": total_expenses_grouped,
         "total_expenses_sum": total_expenses_sum,
-        "stocks_only": stocks_only,
         "interest_earned": interest_earned,
         "cashback": cashback,
-        "dividends": dividends,
+        **fields_to_return,
     }
 
 
