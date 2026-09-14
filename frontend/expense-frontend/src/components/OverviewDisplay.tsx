@@ -44,7 +44,7 @@ export const OverviewDisplay: React.FC<TradingOverviewOneMonthDisplay> = ({
         (section, index) =>
           section.data && (
             <InfoDisplay
-              cssOverrideParent="h-[600px]"
+              cssOverrideParent="h-[750px]"
               title={section.title}
               key={index}
               showFullScreen
