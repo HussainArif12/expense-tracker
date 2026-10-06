@@ -28,6 +28,7 @@ async def get_bank_analysis(
     costs_grouped = costs_grouped.to_dict()
 
     costs_grouped_by_time = costs.copy()
+    print(costs_grouped_by_time)
     costs_grouped_by_time["Month & Year"] = pd.to_datetime(
         costs_grouped_by_time["Month & Year"]
     ).dt.day

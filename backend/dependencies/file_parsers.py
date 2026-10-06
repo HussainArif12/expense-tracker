@@ -1,8 +1,6 @@
 import io
 import json
-from pathlib import Path
 from enum import Enum
-from typing import Optional
 
 import pandas as pd
 
@@ -12,13 +10,13 @@ class BankFilter(Enum):
     INCLUDE_BANK_ROWS = "include_bank_rows"
 
 
-def get_filter_path() -> Optional[str]:
-    candidate = Path(__file__).resolve().parent.parent / "filters" / "filter.json"
-    return str(candidate) if candidate.exists() else None
+def get_filter(contents: bytes) -> dict:
+    filters = json.loads(contents)
+    return filters if isinstance(filters, dict) else {}
 
 
 def parse_bank_csv(
-    contents: bytes, filter_file_path: Optional[str] = None
+    contents: bytes, filter_contents: bytes | None = None
 ) -> pd.DataFrame:
     df = pd.read_csv(
         io.BytesIO(contents), encoding="unicode_escape", sep=";", decimal=","
@@ -26,7 +24,7 @@ def parse_bank_csv(
     df["Buchungstag"] = pd.to_datetime(df["Buchungstag"], format="%d.%m.%y")
     df["Valutadatum"] = pd.to_datetime(df["Valutadatum"], format="%d.%m.%y")
     # 2. Extract Month & Year as a string (e.g., "2026-05")
-    df["Month & Year"] = df["Valutadatum"].dt.strftime("%Y-%m")
+    df["Month & Year"] = df["Valutadatum"].dt.strftime("%Y-%m-%d")
     df = df.filter(
         items=[
             "Buchungstag",
@@ -39,8 +37,8 @@ def parse_bank_csv(
         ]
     )
 
-    if filter_file_path:
-        filters = json.loads(Path(filter_file_path).read_text())
+    if filter_contents:
+        filters = get_filter(filter_contents)
 
         for column, values in filters.items():
             for value in values:
