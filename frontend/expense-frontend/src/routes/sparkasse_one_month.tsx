@@ -16,6 +16,7 @@ export const Route = createFileRoute('/sparkasse_one_month')({
 function RouteComponent() {
   const [bankOverview, setBankOverview] = useState<FinancialOverview | null>()
   const { setBankingFile, bankingFile } = useFileSharing()
+  const [filterFile, setFilterFile] = useState<File | null>(null)
   const [pieMode, setPieMode] = useState<boolean>(false)
 
   const totalExpensesToRender = useMemo<ChartDatum[] | undefined>(() => {
@@ -34,16 +35,25 @@ function RouteComponent() {
       return Number((bankOverview.inflow - bankOverview.outflow).toFixed(2))
   }, [bankOverview])
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBankingFile(event.target.files?.[0] ?? null)
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    fileType: 'banking' | 'filter',
+  ) => {
+    if (fileType === 'banking') {
+      setBankingFile(event.target.files?.[0] ?? null)
+    } else {
+      setFilterFile(event.target.files?.[0] ?? null)
+    }
   }
-
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!bankingFile) return
 
     const formData = new FormData()
     formData.append('bank_file', bankingFile)
+    if (filterFile) {
+      formData.append('filter_file', filterFile)
+    }
 
     const bankOverviewResponse = await postFormClient(
       '/bank_one_month/total_overview',
@@ -76,8 +86,21 @@ function RouteComponent() {
           id="csvFile"
           type="file"
           accept=".csv"
-          onChange={handleFileChange}
+          onChange={(event) => handleFileChange(event, 'banking')}
           className="bg-yellow-300 rounded-md p-1"
+        />
+        <label
+          htmlFor="filterFile"
+          className="block text-sm font-medium text-slate-700"
+        >
+          Upload filter file (optional)
+        </label>
+        <input
+          id="filterFile"
+          type="file"
+          accept=".json"
+          className="bg-yellow-300 rounded-md p-1"
+          onChange={(event) => handleFileChange(event, 'filter')}
         />
         <button
           type="submit"

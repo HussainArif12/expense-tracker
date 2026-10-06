@@ -18,13 +18,21 @@ function RouteComponent() {
   const [merchantOverview, setMerchantOverview] =
     useState<MerchantGroupedSparkasse>()
   const [bankingFile, setBankingFile] = useState<File | null>()
+  const [filterFile, setFilterFile] = useState<File | null>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
   const net = multiMonthOverview
     ? multiMonthOverview.inflow_total - multiMonthOverview.outflow_total
     : 0
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBankingFile(event.target.files?.[0] ?? null)
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    fileType: 'banking' | 'filter',
+  ) => {
+    if (fileType === 'banking') {
+      setBankingFile(event.target.files?.[0] ?? null)
+    } else {
+      setFilterFile(event.target.files?.[0] ?? null)
+    }
   }
 
   const outflowToChart = useMemo(() => {
@@ -52,6 +60,9 @@ function RouteComponent() {
     setIsLoading(true)
     const formData = new FormData()
     formData.append('bank_file', bankingFile)
+    if (filterFile) {
+      formData.append('filter_file', filterFile)
+    }
     try {
       const [bankOverviewResponse, merchantOverviewResponse] =
         await Promise.all([
@@ -75,7 +86,7 @@ function RouteComponent() {
           <span className="font-bold">Upload</span> to upload it
         </p>
       )}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 ">
         <label
           htmlFor="csvFile"
           className="block text-sm font-medium text-slate-700"
@@ -86,7 +97,20 @@ function RouteComponent() {
           id="csvFile"
           type="file"
           accept=".csv"
-          onChange={handleFileChange}
+          onChange={(event) => handleFileChange(event, 'banking')}
+          className="bg-yellow-300 rounded-md p-1"
+        />
+        <label
+          htmlFor="filterFile"
+          className="block text-sm font-medium text-slate-700"
+        >
+          Upload filter file (optional)
+        </label>
+        <input
+          id="filterFile"
+          type="file"
+          accept=".json"
+          onChange={(event) => handleFileChange(event, 'filter')}
           className="bg-yellow-300 rounded-md p-1"
         />
         <button

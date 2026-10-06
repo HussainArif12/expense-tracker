@@ -13,7 +13,14 @@ export const Route = createFileRoute('/verdict')({
 function RouteComponent() {
   const { setTradingFile, bankingFile, setBankingFile, tradingFile } =
     useFileSharing()
+  const [filterFile, setFilterFile] = useState<File | null>(null)
   const [outcome, setOutcome] = useState<FinancialVerdict | null>()
+
+  const handleFilterFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setFilterFile(event.target.files?.[0] ?? null)
+  }
 
   const outcomeToRender = useMemo(() => {
     if (!outcome) return
@@ -83,7 +90,7 @@ function RouteComponent() {
     const formData = new FormData()
     bankingFile && formData.append('bank_file', bankingFile)
     tradingFile && formData.append('trading_file', tradingFile)
-
+    filterFile && formData.append('filter_file', filterFile)
     const responseData = await postFormClient('/verdict/get_verdict', formData)
     setOutcome(responseData)
   }
@@ -120,14 +127,26 @@ function RouteComponent() {
             onChange={handleBankingFileChange}
             className="bg-yellow-300 rounded-md p-1"
           />
-          <button
-            type="submit"
-            disabled={!(tradingFile || bankingFile)}
-            className="bg-blue-300 rounded-md p-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+          <label
+            htmlFor="filterFile"
+            className="block text-sm font-medium text-slate-700"
           >
-            Submit
-          </button>
+            Upload Filter File
+          </label>
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleFilterFileChange}
+            className="bg-yellow-300 rounded-md p-1"
+          />
         </div>
+        <button
+          type="submit"
+          disabled={!(tradingFile || bankingFile)}
+          className="bg-blue-300 rounded-md p-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+        >
+          Submit
+        </button>
       </form>
       <div>
         {outcome && (
@@ -156,7 +175,7 @@ function RouteComponent() {
               <h1
                 className={`text-9xl ${finalNet < 0 ? 'text-red-800' : 'text-green-800'}`}
               >
-                {((finalNet / finalInflow) * 100).toFixed(2)}
+                {((finalNet / finalInflow) * 100).toFixed(2)}%
               </h1>
             </InfoDisplay>
           </div>
